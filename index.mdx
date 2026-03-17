@@ -1,97 +1,50 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: Introduction
+description: A provider-agnostic Go agent orchestration framework.
 ---
 
-## Setting up
+**chainforge** is a Go library for building AI agent applications without coupling your code to any LLM SDK. Swap providers, tools, and memory stores with a single line.
 
-Get your documentation site up and running in minutes.
+```bash
+go get github.com/lioarce01/chainforge
+```
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+## What it does
 
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Provider-agnostic" icon="shuffle">
+    Anthropic, OpenAI, Ollama, or any OpenAI-compatible API. Switch with one line, zero other changes.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="MCP client" icon="plug">
+    Connect any MCP server via Streamable HTTP or Stdio. Tools are auto-discovered and namespaced.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Concurrent tool dispatch" icon="bolt">
+    Multiple tool calls from a single LLM response run in parallel goroutines automatically.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Multi-agent orchestration" icon="diagram-project">
+    Sequential pipelines and parallel fan-out with partial-failure safety.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## Minimal example
 
-Everything you need to create world-class documentation.
+```go
+import (
+    chainforge "github.com/lioarce01/chainforge"
+    "github.com/lioarce01/chainforge/pkg/providers/anthropic"
+    "github.com/lioarce01/chainforge/pkg/tools/calculator"
+)
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+agent, err := chainforge.NewAgent(
+    chainforge.WithProvider(anthropic.New(os.Getenv("ANTHROPIC_API_KEY"))),
+    chainforge.WithModel("claude-sonnet-4-6"),
+    chainforge.WithSystemPrompt("You are a helpful assistant."),
+    chainforge.WithTools(calculator.New()),
+)
 
-## Need inspiration?
+result, err := agent.Run(ctx, "session-1", "What is 2^10 + 144?")
+```
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Build your first agent in under 5 minutes.
 </Card>
